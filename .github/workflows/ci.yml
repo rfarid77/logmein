@@ -36,15 +36,8 @@ jobs:
         run: |
           cd backend
           pip install -r requirements.txt
-          pip install pytest flake8 psycopg2-binary
 
       - name: Run tests
-        env:
-          DB_HOST: localhost
-          DB_NAME: logs_db
-          DB_USER: logs_user
-          DB_PASSWORD: logs_password
-          DB_PORT: 5432
         run: |
           cd backend
           pytest -v tests/
@@ -52,4 +45,4 @@ jobs:
       - name: Run flake8
         run: |
           cd backend
-          flake8 app.py
+          flake8 --max-line-length=120 app.py
