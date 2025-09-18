@@ -9,6 +9,7 @@
 - **Statistics** in real time
 - **Auto-refresh** every 30 seconds
 
+
 ## 📁 Structure
 
 ```
@@ -78,3 +79,4 @@ cd frontend
 # Serve with a simple web server
 python -m http.server 8000
 ```
+# Test ci
