@@ -23,6 +23,7 @@ jobs:
           --health-interval=10s
           --health-timeout=5s
           --health-retries=5
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -34,15 +35,15 @@ jobs:
 
       - name: Install dependencies
         run: |
-          cd LogMeIn/backend
+          cd backend
           pip install -r requirements.txt
 
       - name: Run tests
         run: |
-          cd LogMeIn/backend
+          cd backend
           pytest -v tests/
 
       - name: Run flake8
         run: |
-          cd LogMeIn/backend
+          cd backend
           flake8 app.py
