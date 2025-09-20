@@ -1,0 +1,55 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: logs_db
+      POSTGRES_USER: logs_user
+      POSTGRES_PASSWORD: logs_password
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    networks:
+      - backend_net   # DB uniquement sur le réseau backend
+
+  backend:
+    image: rayanfrd77/logmein-backend:latest # image construite & poussée via CI
+    environment:
+      DB_HOST: db
+      DB_NAME: logs_db
+      DB_USER: logs_user
+      DB_PASSWORD: logs_password
+      DB_PORT: 5432
+    ports:
+      - "5000:5000"
+    depends_on:
+      - db
+    deploy:
+      replicas: 2
+      restart_policy:
+        condition: on-failure
+    networks:
+      - frontend_net   # backend parle au frontend
+      - backend_net    # backend parle à la DB
+
+  frontend:
+    image: rayanfrd77/logmein-frontend:latest
+    ports:
+      - "8080:80"
+    depends_on:
+      - backend
+    deploy:
+      replicas: 2
+      restart_policy:
+        condition: on-failure
+    networks:
+      - frontend_net   # frontend parle seulement au backend
+
+volumes:
+  db_data:
+
+networks:
+  frontend_net:
+    driver: overlay
+  backend_net:
+    driver: overlay
